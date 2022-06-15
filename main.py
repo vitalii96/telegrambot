@@ -1,5 +1,7 @@
 import telebot
 import json
+
+from self import self
 from telebot import types
 import sqlite3
 import buttons
@@ -7,13 +9,13 @@ import db
 import config
 import inlineLocation
 from keyBoard import KeyBoard
+
 bot = telebot.TeleBot(config.TOKEN)
 
 
 @bot.message_handler(commands=['start'])  # спрацьовує при команді "\start"
 def start(message):
     KeyBoard.start(message)
-
 
 
 @bot.message_handler()  # спрацьовує при отриманні будь якого повідомлення
@@ -24,8 +26,8 @@ def bot_message(message):
         db.send_qr(message)
     elif message.text == 'Повернутися':
         buttons.start(message)
-    elif message.text =='Наші магазини':
-        inlineLocation.town_location(message)
+    elif message.text == 'Наші магазини':
+        KeyBoard.town_location(message)
 
 
 @bot.message_handler(content_types=['contact'])
@@ -41,15 +43,14 @@ def answer(call):
     if call.data == 'CHERVONOGRAD':
         location.chervonograd_location(call)
 
-        #bot.send_location(call.message.chat.id, longitude=lon, latitude=lat)
     elif call.data == 'NOVOVOLINSK':
-        bot.send_location(call.message.chat.id, longitude=lon, latitude=lat)
+        location.novovolynsk_location(call)
     elif call.data == 'ZHOVKVA':
         bot.send_location(call.message.chat.id, longitude=lon, latitude=lat)
     elif call.data == 'VOLODYMYR':
-        bot.send_location(call.message.chat.id, longitude=lon, latitude=lat)
+        location.volodumyr_location(call)
     elif call.data == 'SOKAL':
-        bot.send_location(call.message.chat.id, longitude=lon, latitude=lat)
+        location.sokal_location(call)
     elif call.data == 'SOSNIVKA':
         bot.send_location(call.message.chat.id, longitude=lon, latitude=lat)
     elif call.data == 'DOBROTVIR':
